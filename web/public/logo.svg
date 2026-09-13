@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Post-quantum lock">
+  <!-- Solo el emblema blanco; fondo transparente -->
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Anillo exterior -->
+    <circle cx="256" cy="256" r="210" stroke-width="28"/>
+
+    <!-- Arco del candado -->
+    <path
+      d="M188 230 V188 a68 68 0 0 1 136 0 V230"
+      stroke-width="26"
+    />
+
+    <!-- Cuerpo: marco -->
+    <rect x="168" y="230" width="176" height="176" rx="10" stroke-width="18"/>
+
+    <!-- Red / lattice del cuerpo -->
+    <g stroke-width="7">
+      <!-- horizontales -->
+      <line x1="192" y1="274" x2="320" y2="274"/>
+      <line x1="192" y1="318" x2="320" y2="318"/>
+      <line x1="192" y1="362" x2="320" y2="362"/>
+      <!-- verticales -->
+      <line x1="216" y1="254" x2="216" y2="382"/>
+      <line x1="256" y1="254" x2="256" y2="382"/>
+      <line x1="296" y1="254" x2="296" y2="382"/>
+      <!-- diagonales -->
+      <line x1="192" y1="274" x2="256" y2="362"/>
+      <line x1="320" y1="274" x2="256" y2="362"/>
+      <line x1="192" y1="362" x2="256" y2="274"/>
+      <line x1="320" y1="362" x2="256" y2="274"/>
+      <line x1="216" y1="254" x2="296" y2="382"/>
+      <line x1="296" y1="254" x2="216" y2="382"/>
+    </g>
+
+    <!-- Nodos de la red -->
+    <g fill="#fff" stroke="none">
+      <circle cx="192" cy="274" r="8"/>
+      <circle cx="256" cy="274" r="8"/>
+      <circle cx="320" cy="274" r="8"/>
+      <circle cx="192" cy="318" r="8"/>
+      <circle cx="256" cy="318" r="8"/>
+      <circle cx="320" cy="318" r="8"/>
+      <circle cx="192" cy="362" r="8"/>
+      <circle cx="256" cy="362" r="8"/>
+      <circle cx="320" cy="362" r="8"/>
+      <circle cx="216" cy="254" r="7"/>
+      <circle cx="296" cy="254" r="7"/>
+      <circle cx="216" cy="382" r="7"/>
+      <circle cx="296" cy="382" r="7"/>
+    </g>
+  </g>
+</svg>
