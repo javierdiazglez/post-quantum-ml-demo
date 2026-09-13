@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clásico vs Post-Cuántico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fragment+Mono:wght@400&family=Sora:wght@400;500;600;700&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <nav class="nav">
+        <a href="#intercambio">Intercambio</a>
+        <a href="#firmas">Firmas</a>
+        <a href="#comparacion">Comparación</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ========== KEY EXCHANGE ========== -->
+      <section id="intercambio" class="lab-section">
+        <div class="section-head">
+          <p class="eyebrow"><strong>Demo 01 · Intercambio de claves</strong></p>
+          <h2>Acordar un secreto sin enviarlo en claro</h2>
+          <p>
+            Alice y Bob acuerdan el <em>mismo secreto</em> (32 bytes) sin mandarlo en claro.
+            Cambia de modo: <strong>RSA-OAEP 2048</strong> (clásico, factorización) no es el
+            mismo algoritmo que <strong>ML-KEM-768</strong> (post-cuántico, retículos, NIST nivel 3).
+            El guion de la demo es parecido a propósito; fíjate en tamaños y en que Shor rompe RSA, no ML-KEM.
+            Usa <strong>Siguiente paso</strong> o <strong>Ejecutar todo</strong>.
+          </p>
+        </div>
+
+        <div class="mode-bar" role="tablist" aria-label="Modo de intercambio">
+          <button class="mode-btn is-active" data-panel="kem" data-mode="classical" type="button">
+            Clásico · RSA-OAEP
+          </button>
+          <button class="mode-btn" data-panel="kem" data-mode="pq" type="button">
+            Post-cuántico · ML-KEM-768
+          </button>
+        </div>
+
+        <div class="lab-split">
+          <aside class="algo-guide">
+            <h3 data-kem-guide-title>Cómo funciona el algoritmo</h3>
+            <ol class="guide-list" data-kem-steps aria-label="Pasos del intercambio"></ol>
+          </aside>
+
+          <div class="stage" data-stage="kem">
+            <p class="stage-label">Demo en vivo - sigue los pasos con los botones</p>
+
+            <div class="storyboard">
+              <article class="actor" data-actor="alice">
+                <header>
+                  <span class="actor-dot alice"></span>
+                  <div>
+                    <h3>Alice</h3>
+                    <p class="actor-role" data-role-alice>-</p>
+                  </div>
+                </header>
+                <div class="token-row">
+                  <div class="token muted" data-token="alice-pk">
+                    <span class="token-name">Pública</span>
+                    <span class="token-origin" data-alice-pk-origin>Aún no generada</span>
+                    <span class="token-size" data-alice-pk-size>-</span>
+                    <span class="token-fp" data-alice-pk>-</span>
+                  </div>
+                  <div class="token muted secret-token" data-token="alice-sk">
+                    <span class="token-name">Secreta</span>
+                    <span class="token-origin" data-alice-sk-origin>Aún no generada</span>
+                    <span class="token-size" data-alice-sk-size>-</span>
+                    <span class="token-fp secret" data-alice-sk>-</span>
+                  </div>
+                  <div class="token muted shared-token" data-token="alice-ss">
+                    <span class="token-name">Secreto compartido</span>
+                    <span class="token-origin" data-alice-ss-origin>Aún no generado</span>
+                    <span class="token-size" data-alice-ss-size>-</span>
+                    <span class="token-fp highlight" data-alice-ss>-</span>
+                  </div>
+                </div>
+              </article>
+
+              <div class="channel-board">
+                <p class="channel-title">Canal público <span>(cualquiera puede verlo)</span></p>
+                <div class="lane">
+                  <div class="lane-track">
+                    <span class="packet" data-packet-kem></span>
+                  </div>
+                  <div class="lane-cargo">
+                    <span class="field-label" data-wire-label>Nada en tránsito</span>
+                    <span class="token-fp" data-wire-value>-</span>
+                    <p class="cargo-explain" data-wire-explain>
+                      Aquí solo viaja lo que no revela el secreto final.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <article class="actor" data-actor="bob">
+                <header>
+                  <span class="actor-dot bob"></span>
+                  <div>
+                    <h3>Bob</h3>
+                    <p class="actor-role" data-role-bob>-</p>
+                  </div>
+                </header>
+                <div class="token-row">
+                  <div class="token muted" data-token="bob-pk">
+                    <span class="token-name">Pública</span>
+                    <span class="token-origin" data-bob-pk-origin>Aún no generada</span>
+                    <span class="token-size" data-bob-pk-size>-</span>
+                    <span class="token-fp" data-bob-pk>-</span>
+                  </div>
+                  <div class="token muted secret-token" data-token="bob-sk">
+                    <span class="token-name">Secreta</span>
+                    <span class="token-origin" data-bob-sk-origin>Aún no generada</span>
+                    <span class="token-size" data-bob-sk-size>-</span>
+                    <span class="token-fp secret" data-bob-sk>-</span>
+                  </div>
+                  <div class="token muted shared-token" data-token="bob-ss">
+                    <span class="token-name">Secreto compartido</span>
+                    <span class="token-origin" data-bob-ss-origin>Aún no generado</span>
+                    <span class="token-size" data-bob-ss-size>-</span>
+                    <span class="token-fp highlight" data-bob-ss>-</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="size-compare" data-kem-sizes hidden>
+              <p class="size-title">Tamaños en este run</p>
+              <div class="bars" data-kem-bars></div>
+            </div>
+
+            <div class="controls">
+              <button class="btn btn-primary" id="kem-next" type="button">Siguiente paso</button>
+              <button class="btn btn-ghost" id="kem-all" type="button">Ejecutar todo</button>
+              <button class="btn btn-ghost" id="kem-reset" type="button">Reiniciar</button>
+              <p class="hint" data-kem-hint></p>
+            </div>
+
+            <div class="result-banner" data-kem-result hidden>
+              <p data-kem-result-text></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SIGNATURES ========== -->
+      <section id="firmas" class="lab-section alt">
+        <div class="section-head">
+          <p class="eyebrow"><strong>Demo 02 · Firmas digitales</strong></p>
+          <h2>Probar que el mensaje es de Alice</h2>
+          <p>
+            Misma idea de autenticidad en <strong>RSA-PSS 2048</strong> (clásico) y
+            <strong>ML-DSA-65</strong> (post-cuántico, NIST nivel 3): firmar con secreta,
+            verificar con pública. No son el mismo algoritmo: cambia la matemática, el tamaño
+            de la firma (~256 B vs ~3309 B) y si Shor puede falsificarla.
+          </p>
+        </div>
+
+        <div class="mode-bar" role="tablist" aria-label="Modo de firmas">
+          <button class="mode-btn is-active" data-panel="sig" data-mode="classical" type="button">
+            Clásico · RSA-PSS
+          </button>
+          <button class="mode-btn" data-panel="sig" data-mode="pq" type="button">
+            Post-cuántico · ML-DSA-65
+          </button>
+        </div>
+
+        <div class="lab-split">
+          <aside class="algo-guide">
+            <h3 data-sig-guide-title>Cómo funciona el algoritmo</h3>
+            <ol class="guide-list" data-sig-steps aria-label="Pasos de la firma"></ol>
+          </aside>
+
+          <div class="stage" data-stage="sig">
+            <p class="stage-label">Demo en vivo - sigue los pasos con los botones</p>
+            <label class="message-box">
+              <span>Mensaje que Alice quiere autenticar</span>
+              <textarea id="sig-message" rows="2">Hola Bob, este mensaje es auténtico.</textarea>
+            </label>
+
+            <div class="storyboard">
+              <article class="actor" data-actor="alice">
+                <header>
+                  <span class="actor-dot alice"></span>
+                  <div>
+                    <h3>Alice (firma)</h3>
+                    <p class="actor-role">Solo ella tiene la clave secreta</p>
+                  </div>
+                </header>
+                <div class="token-row">
+                  <div class="token muted" data-token="sig-pk">
+                    <span class="token-name">Pública</span>
+                    <span class="token-origin" data-sig-pk-origin>Aún no generada</span>
+                    <span class="token-size" data-sig-pk-size>-</span>
+                    <span class="token-fp" data-sig-alice-pk>-</span>
+                  </div>
+                  <div class="token muted secret-token" data-token="sig-sk">
+                    <span class="token-name">Secreta (no viaja)</span>
+                    <span class="token-origin" data-sig-sk-origin>Aún no generada</span>
+                    <span class="token-size" data-sig-sk-size>-</span>
+                    <span class="token-fp secret" data-sig-alice-sk>-</span>
+                  </div>
+                  <div class="token muted shared-token" data-token="sig-sig">
+                    <span class="token-name">Firma</span>
+                    <span class="token-origin" data-sig-sig-origin>Aún no generada</span>
+                    <span class="token-size" data-sig-sig-size>-</span>
+                    <span class="token-fp highlight" data-sig-value>-</span>
+                  </div>
+                </div>
+              </article>
+
+              <div class="channel-board">
+                <p class="channel-title">Canal público</p>
+                <div class="lane">
+                  <div class="lane-track">
+                    <span class="packet" data-packet-sig></span>
+                  </div>
+                  <div class="lane-cargo">
+                    <span class="field-label" data-sig-wire-label>Nada en tránsito</span>
+                    <span class="token-fp" data-sig-wire-value>-</span>
+                    <p class="cargo-explain" data-sig-wire-explain>
+                      Viajan mensaje + firma (+ clave pública).
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <article class="actor" data-actor="bob">
+                <header>
+                  <span class="actor-dot bob"></span>
+                  <div>
+                    <h3>Bob (verifica)</h3>
+                    <p class="actor-role">Usa la pública · no necesita secreta</p>
+                  </div>
+                </header>
+                <div class="token-row cols-2">
+                  <div class="token muted" data-token="sig-verify">
+                    <span class="token-name">¿Firma válida?</span>
+                    <span class="token-fp" data-sig-verify>-</span>
+                  </div>
+                  <div class="token muted" data-token="sig-tamper">
+                    <span class="token-name">Mensaje alterado</span>
+                    <span class="token-fp" data-sig-tamper>-</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="size-compare" data-sig-sizes hidden>
+              <p class="size-title">Tamaños en este run</p>
+              <div class="bars" data-sig-bars></div>
+            </div>
+
+            <div class="controls">
+              <button class="btn btn-primary" id="sig-next" type="button">Siguiente paso</button>
+              <button class="btn btn-ghost" id="sig-all" type="button">Ejecutar todo</button>
+              <button class="btn btn-ghost" id="sig-reset" type="button">Reiniciar</button>
+              <p class="hint" data-sig-hint></p>
+            </div>
+
+            <div class="result-banner" data-sig-result hidden>
+              <p data-sig-result-text></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="comparacion" class="lab-section">
+        <div class="section-head">
+          <p class="eyebrow">Diferencias clave</p>
+          <h2>¿Qué debes recordar?</h2>
+          <p>
+            Importante: <strong>mismo objetivo ≠ mismo algoritmo</strong>. Arriba el guion
+            se parece para poder comparar. Aquí va el contraste real entre
+            <strong>RSA-OAEP / RSA-PSS</strong> (clásico) y
+            <strong>ML-KEM-768 / ML-DSA-65</strong> (post-cuántico).
+          </p>
+        </div>
+
+        <div class="diff-grid">
+          <article class="diff-card">
+            <h3>Intercambio: RSA-OAEP 2048 ≠ ML-KEM-768</h3>
+            <p>
+              Los dos resuelven el mismo problema (acordar 32 bytes en secreto), pero
+              <strong>son algoritmos distintos</strong>. El flujo de la demo es parecido
+              solo para que compares: Alice tiene el par; Bob manda ciphertext; Alice abre.
+            </p>
+            <ul>
+              <li>
+                <strong>RSA-OAEP:</strong> Bob <em>cifra</em> un secreto al azar con la
+                pública RSA de Alice (factorización). Shor puede romperlo. Ciphertext ~256 B.
+              </li>
+              <li>
+                <strong>ML-KEM-768</strong> (FIPS 203): Bob <em>encapsula</em> (retículos /
+                Module-LWE). No es “RSA con otro nombre”. Resistente a Shor. Ciphertext ~1088 B.
+                NIST nivel 3 (~AES-192).
+              </li>
+              <li>
+                En ambos el secreto final son 32 B (luego suelen usarse como clave AES).
+                Cambia el motor, no el tamaño del secreto acordado.
+              </li>
+            </ul>
+            <span class="tag risk">Mismo papel · distinto algoritmo</span>
+          </article>
+
+          <article class="diff-card">
+            <h3>Firmas: RSA-PSS 2048 ≠ ML-DSA-65</h3>
+            <p>
+              Otra vez: mismo papel (probar que el mensaje es de Alice),
+              <strong>algoritmos distintos</strong>. Guion igual: firmar con secreta,
+              verificar con pública; si alteras el mensaje, falla.
+            </p>
+            <ul>
+              <li>
+                <strong>RSA-PSS:</strong> firma clásica sobre RSA-2048. Firma ~256 B.
+                Shor también la amenaza (misma familia RSA).
+              </li>
+              <li>
+                <strong>ML-DSA-65</strong> (FIPS 204): firma en retículos, pareja de
+                ML-KEM-768 (ambos NIST nivel 3). Firma ~3309 B: más bytes a cambio de
+                resistencia cuántica.
+              </li>
+            </ul>
+            <span class="tag safe">Mismo papel · tamaño y seguridad distintos</span>
+          </article>
+
+          <article class="diff-card">
+            <h3>Por qué importa (Shor y NIST nivel 3)</h3>
+            <p>
+              Hoy RSA aguanta atacantes con ordenadores normales. El riesgo es a futuro:
+              un QC con Shor factoriza RSA y puede recuperar claves o falsificar firmas.
+            </p>
+            <ul>
+              <li>
+                Por eso NIST estandarizó <strong>ML-KEM</strong> y <strong>ML-DSA</strong>.
+              </li>
+              <li>
+                En esta demo usamos <strong>ML-KEM-768</strong> + <strong>ML-DSA-65</strong>
+                (Category 3 ≈ AES-192): el nivel recomendado habitual, no el más flojo ni el extremo.
+              </li>
+              <li>
+                Contra retículos, Grover solo da ventaja cuadrática aproximada; se compensa
+                con parámetros más grandes (el “768” y el “65”).
+              </li>
+            </ul>
+            <span class="tag safe">NIST Category 3 · ~AES-192</span>
+          </article>
+
+          <article class="diff-card">
+            <h3>Cómo verlo en la demo + trade-off</h3>
+            <p>
+              Cambia el modo Clásico ↔ Post-cuántico y mira los tamaños de
+              Clave Pública (PK), Clave Secreta (SK) y
+              ciphertext/firma: ahí se nota que no es el mismo algoritmo. El secreto
+              acordado <strong>no es el mensaje</strong>: es una clave simétrica (p. ej. AES)
+              para cifrar después.
+            </p>
+            <ul>
+              <li>
+                <strong>Trade-off PQ:</strong> más bytes en claves y ciphertext, a cambio
+                de resistir Shor (y ML-KEM suele ser rápido en hardware moderno).
+              </li>
+              <li>
+                En producción a veces se usan esquemas <em>híbridos</em> (clásico + PQ).
+                Aquí los mostramos por separado para que la diferencia se vea clara.
+              </li>
+            </ul>
+            <span class="tag">Mira los tamaños al cambiar de modo</span>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Demo educativa con
+        <a href="https://github.com/paulmillr/noble-post-quantum" target="_blank" rel="noopener noreferrer">@noble/post-quantum</a>
+        y Web Crypto API.
+      </p>
+      <div class="footer-links">
+        <a
+          class="footer-github footer-star"
+          href="https://github.com/javierdiazglez/post-quantum-ml-demo"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="post-quantum-ml-demo — Post-Quantum ML Demo"
+        >
+          <svg class="footer-github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path
+              fill="currentColor"
+              d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"
+            />
+          </svg>
+          <span>Star · Post-Quantum ML Demo</span>
+        </a>
+        <a
+          class="footer-github"
+          href="https://github.com/javierdiazglez"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="footer-github-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path
+              fill="currentColor"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+            />
+          </svg>
+          <span>javierdiazglez</span>
+        </a>
+      </div>
+    </footer>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
