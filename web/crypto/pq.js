@@ -1,5 +1,5 @@
 /**
- * Wrappers post-cuánticos con @noble/post-quantum.
+ * Wrappers post-cuánticos con @noble/post-quantum (JS puro, FIPS 203/204).
  * Algoritmos NIST nivel 3: ML-KEM-768 y ML-DSA-65.
  */
 import { ml_kem768 } from '@noble/post-quantum/ml-kem.js';
