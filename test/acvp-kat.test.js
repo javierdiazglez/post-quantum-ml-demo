@@ -38,6 +38,10 @@ function concatBytes(...arrs) {
   return out;
 }
 
+function equalBytes(a, b) {
+  return a.length === b.length && a.every((byte, i) => byte === b[i]);
+}
+
 /** Carga el par prompt (entradas) + expectedResults (respuestas NIST). */
 function loadSuite(name) {
   const dir = join(ROOT, name);
@@ -78,14 +82,15 @@ describe('NIST ACVP KAT — ML-KEM-768 (FIPS 203)', () => {
       expect(secretKey).toEqual(hexToBytes(t.expected.dk));
       n++;
     }
-    expect(n).toBeGreaterThan(0);
+    expect(n).toBe(25);
   });
 
   // encapsulation: (ek, m) → ciphertext c + shared secret k
   // decapsulation: (dk, c) → shared secret k (debe coincidir con NIST)
   test('encapDecap', () => {
     const { prompt, expected } = loadSuite('ML-KEM-encapDecap-FIPS203');
-    let n = 0;
+    let nEncap = 0;
+    let nDecap = 0;
     for (const t of zipGroups(prompt, expected)) {
       if (t.group.function === 'encapsulation') {
         const { cipherText, sharedSecret } = ml_kem768.encapsulate(
@@ -94,18 +99,20 @@ describe('NIST ACVP KAT — ML-KEM-768 (FIPS 203)', () => {
         );
         expect(cipherText).toEqual(hexToBytes(t.expected.c));
         expect(sharedSecret).toEqual(hexToBytes(t.expected.k));
+        nEncap++;
       } else if (t.group.function === 'decapsulation') {
         const sharedSecret = ml_kem768.decapsulate(
           hexToBytes(t.prompt.c),
           hexToBytes(t.prompt.dk)
         );
         expect(sharedSecret).toEqual(hexToBytes(t.expected.k));
+        nDecap++;
       } else {
         throw new Error(`unexpected function ${t.group.function}`);
       }
-      n++;
     }
-    expect(n).toBeGreaterThan(0);
+    expect(nEncap).toBe(25);
+    expect(nDecap).toBe(10);
   });
 });
 
@@ -120,7 +127,7 @@ describe('NIST ACVP KAT — ML-DSA-65 (FIPS 204)', () => {
       expect(secretKey).toEqual(hexToBytes(t.expected.sk));
       n++;
     }
-    expect(n).toBeGreaterThan(0);
+    expect(n).toBe(25);
   });
 
   // sigGen (external, pure): sin rnd → firmas deterministas (extraEntropy: false);
@@ -138,14 +145,15 @@ describe('NIST ACVP KAT — ML-DSA-65 (FIPS 204)', () => {
       expect(sig).toEqual(hexToBytes(t.expected.signature));
       n++;
     }
-    expect(n).toBeGreaterThan(0);
+    expect(n).toBe(30);
   });
 
   // sigVer: verify(sig, msg, pk) debe devolver exactamente testPassed de NIST
   // (incluye casos negativos donde la firma/mensaje son inválidos).
   test('sigVer', () => {
     const { prompt, expected } = loadSuite('ML-DSA-sigVer-FIPS204');
-    let n = 0;
+    let nPass = 0;
+    let nFail = 0;
     for (const t of zipGroups(prompt, expected)) {
       const context = t.prompt.context ? hexToBytes(t.prompt.context) : undefined;
       const valid = ml_dsa65.verify(
@@ -155,8 +163,38 @@ describe('NIST ACVP KAT — ML-DSA-65 (FIPS 204)', () => {
         { context }
       );
       expect(valid).toBe(t.expected.testPassed);
-      n++;
+      if (t.expected.testPassed) nPass++;
+      else nFail++;
     }
-    expect(n).toBeGreaterThan(0);
+    expect(nPass).toBe(3);
+    expect(nFail).toBe(12);
+  });
+});
+
+describe('Propiedades de rechazo (además de ACVP)', () => {
+  // Rechazo de firmas inválidas: un solo bit alterado debe hacer fallar verify.
+  test('ML-DSA-65: firma corrompida (1 bit) → verify false', () => {
+    const { publicKey, secretKey } = ml_dsa65.keygen();
+    const msg = new TextEncoder().encode('tranvia-validacion');
+    const sig = ml_dsa65.sign(msg, secretKey);
+    expect(ml_dsa65.verify(sig, msg, publicKey)).toBe(true);
+
+    const corrupted = new Uint8Array(sig);
+    corrupted[0] ^= 0x01;
+    expect(ml_dsa65.verify(corrupted, msg, publicKey)).toBe(false);
+  });
+
+  // FIPS 203 rechazo implícito: ciphertext manipulado no lanza error;
+  // decapsulate devuelve un secreto de 32 bytes distinto del original (anti-oráculo).
+  test('ML-KEM-768: ciphertext corrompido → rechazo implícito', () => {
+    const { publicKey, secretKey } = ml_kem768.keygen();
+    const { cipherText, sharedSecret } = ml_kem768.encapsulate(publicKey);
+
+    const corrupted = new Uint8Array(cipherText);
+    corrupted[0] ^= 0x01;
+    const rejected = ml_kem768.decapsulate(corrupted, secretKey);
+
+    expect(rejected.length).toBe(32);
+    expect(equalBytes(rejected, sharedSecret)).toBe(false);
   });
 });

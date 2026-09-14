@@ -8,6 +8,7 @@
     "preview": "bunx --bun vite preview",
     "demo:ml-kem": "bun examples/ml-kem.js",
     "demo:ml-dsa": "bun examples/ml-dsa.js",
+    "bench:pq": "bun examples/bench-pq.js",
     "test": "bun test",
     "test:acvp": "bun test test/acvp-kat.test.js",
     "vectors:fetch": "bun scripts/fetch-nist-vectors.js"
