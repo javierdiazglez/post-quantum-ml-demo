@@ -87,8 +87,8 @@ test\acvp-kat.test.js:
 ### Arranque de la aplicación web
 
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 ### Ejemplos de código (CLI)
@@ -96,8 +96,8 @@ npm run dev
 Ejecutar las demos mínimas de cada algoritmo:
 
 ```bash
-npm run demo:ml-kem
-npm run demo:ml-dsa
+bun run demo:ml-kem
+bun run demo:ml-dsa
 ```
 
 Consultar también `examples/ml-kem.js` y `examples/ml-dsa.js`.
